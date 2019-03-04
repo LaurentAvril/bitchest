@@ -3,11 +3,14 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -37,9 +40,24 @@ class User
     private $password;
 
     /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $funds;
+
+    /**
      * @ORM\OneToOne(targetEntity="App\Entity\Avatar", mappedBy="user", cascade={"persist", "remove"})
      */
     private $avatar;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Wallet", mappedBy="user")
+     */
+    private $wallets;
+
+    public function __construct()
+    {
+        $this->wallets = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -94,6 +112,18 @@ class User
         return $this;
     }
 
+    public function getFunds(): ?float
+    {
+        return $this->funds;
+    }
+
+    public function setFunds(?float $funds): self
+    {
+        $this->funds = $funds;
+
+        return $this;
+    }
+
     public function getAvatar(): ?Avatar
     {
         return $this->avatar;
@@ -111,10 +141,46 @@ class User
 
         return $this;
     }
-    
-    public function getSalt()
-    {
 
+    /**
+     * @return Collection|Wallet[]
+     */
+    public function getWallets(): Collection
+    {
+        return $this->wallets;
+    }
+
+    public function addWallet(Wallet $wallet): self
+    {
+        if (!$this->wallets->contains($wallet)) {
+            $this->wallets[] = $wallet;
+            $wallet->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWallet(Wallet $wallet): self
+    {
+        if ($this->wallets->contains($wallet)) {
+            $this->wallets->removeElement($wallet);
+            // set the owning side to null (unless already changed)
+            if ($wallet->getUser() === $this) {
+                $wallet->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getRoles()
+    {
+        return ['ROLE_USER'];
+    }
+
+    public function getUsername()
+    {
+        return $this->getEmail();
     }
 
     public function eraseCredentials()
@@ -122,8 +188,8 @@ class User
 
     }
 
-    public function getRoles()
+    public function getSalt()
     {
-        return $this->roles;
+
     }
 }

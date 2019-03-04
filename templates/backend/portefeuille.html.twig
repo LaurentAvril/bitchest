@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+        <th scope="col">Monnaie</th>
+        <th scope="col" >Quantité</th>
+        <th scope="col">Cours actuel</th>
+        <th scope="col">Variance</th>
+        <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for monn in monney %}
+    <tr {% for wall in user.wallets if wall.cryptomonney.name == monn.name %} class="table-warning" {% endfor %}>
+        {# MONNAIE #}
+        <td>{{ monn.name|capitalize }}</td>
+
+        {# QUANTITE #}
+        <td>
+            {% for wall in user.wallets if wall.cryptomonney.name == monn.name %}
+                <b>{{ wall.quantity }}</b>
+            {% endfor %}
+        </td>
+        {# COURS ACTUEL #}
+        <td>
+            {% for wall in user.wallets if wall.cryptomonney.name == monn.name %}
+                {{ wall.cryptomonney.actualCurrency }}
+            {% endfor %}
+        </td>
+        {# VARIANCE #}
+        <td>
+
+            {% for wall in user.wallets if wall.cryptomonney.name == monn.name %}
+
+        {# SCRIPT DE LA REQUETE AJAX #}
+        <script type="text/javascript">
+        var t = self.setInterval("CotationUpdate()",10000);
+            function CotationUpdate(){
+            $.ajax({
+                url: 'http://localhost:8000/maj-variance',
+                complete: function (response) {
+                    $("#notifications{{ monn.name }}").html(response.responseText);
+                }
+            });
+        }      
+        </script>
+
+
+
+                {% if wall.cryptomonney.variationOfDay >= 0 %}
+                    <span id="notifications{{ monn.name }}" class="badge badge-success">{{ wall.cryptomonney.variationOfDay }}</span>
+                {% else %}
+                    <span id="notifications{{ monn.name }}" class="badge badge-danger">{{ wall.cryptomonney.variationOfDay }}</span>
+                {% endif %}
+            {% endfor %}
+        </td>
+        {# ACTION #}
+        <td>
+            <a href="#">Acheter</a>
+            {% for wall in user.wallets if wall.cryptomonney.name == monn.name %}
+                | <a href="#">Vendre</a>
+            {% endfor %}
+        </td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+
+
+{% endblock %}

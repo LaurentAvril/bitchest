@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Cryptomonnaie;
+use App\Entity\Cryptomonney;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method Cryptomonnaie|null find($id, $lockMode = null, $lockVersion = null)
- * @method Cryptomonnaie|null findOneBy(array $criteria, array $orderBy = null)
- * @method Cryptomonnaie[]    findAll()
- * @method Cryptomonnaie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Cryptomonney|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Cryptomonney|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Cryptomonney[]    findAll()
+ * @method Cryptomonney[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CryptomonnaieRepository extends ServiceEntityRepository
+class CryptomonneyRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, Cryptomonnaie::class);
+        parent::__construct($registry, Cryptomonney::class);
     }
 
     // /**
-    //  * @return Cryptomonnaie[] Returns an array of Cryptomonnaie objects
+    //  * @return Cryptomonney[] Returns an array of Cryptomonney objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class CryptomonnaieRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Cryptomonnaie
+    public function findOneBySomeField($value): ?Cryptomonney
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.exampleField = :val')

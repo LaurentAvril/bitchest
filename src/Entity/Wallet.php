@@ -19,33 +19,23 @@ class Wallet
     private $id;
 
     /**
-     * @ORM\Column(type="float", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="wallets")
      */
-    private $balance;
+    private $user;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $action;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="float")
      */
     private $quantity;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\Cryptomonney", inversedBy="wallets")
      */
-    private $dateAction;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Cryptomonnaie", mappedBy="wallet")
-     */
-    private $cryptomonnaies;
+    private $cryptomonney;
 
     public function __construct()
     {
-        $this->cryptomonnaies = new ArrayCollection();
+        $this->cryptomonney = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -53,80 +43,51 @@ class Wallet
         return $this->id;
     }
 
-    public function getBalance(): ?float
+    public function getUser(): ?User
     {
-        return $this->balance;
+        return $this->user;
     }
 
-    public function setBalance(?float $balance): self
+    public function setUser(?User $user): self
     {
-        $this->balance = $balance;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getAction(): ?bool
-    {
-        return $this->action;
-    }
-
-    public function setAction(?bool $action): self
-    {
-        $this->action = $action;
-
-        return $this;
-    }
-
-    public function getQuantity(): ?int
+    public function getQuantity(): ?float
     {
         return $this->quantity;
     }
 
-    public function setQuantity(?int $quantity): self
+    public function setQuantity(float $quantity): self
     {
         $this->quantity = $quantity;
 
         return $this;
     }
 
-    public function getDateAction(): ?\DateTimeInterface
-    {
-        return $this->dateAction;
-    }
-
-    public function setDateAction(?\DateTimeInterface $dateAction): self
-    {
-        $this->dateAction = $dateAction;
-
-        return $this;
-    }
-
     /**
-     * @return Collection|Cryptomonnaie[]
+     * @return Collection|Cryptomonney[]
      */
-    public function getCryptomonnaies(): Collection
+    public function getCryptomonney()
     {
-        return $this->cryptomonnaies;
+        return $this->cryptomonney;
     }
 
-    public function addCryptomonnaie(Cryptomonnaie $cryptomonnaie): self
+    public function addCryptomonney(Cryptomonney $cryptomonney): self
     {
-        if (!$this->cryptomonnaies->contains($cryptomonnaie)) {
-            $this->cryptomonnaies[] = $cryptomonnaie;
-            $cryptomonnaie->setWallet($this);
+        if (!$this->cryptomonney->contains($cryptomonney)) {
+            $this->cryptomonney[] = $cryptomonney;
         }
 
         return $this;
     }
 
-    public function removeCryptomonnaie(Cryptomonnaie $cryptomonnaie): self
+    public function removeCryptomonney(Cryptomonney $cryptomonney): self
     {
-        if ($this->cryptomonnaies->contains($cryptomonnaie)) {
-            $this->cryptomonnaies->removeElement($cryptomonnaie);
-            // set the owning side to null (unless already changed)
-            if ($cryptomonnaie->getWallet() === $this) {
-                $cryptomonnaie->setWallet(null);
-            }
+        if ($this->cryptomonney->contains($cryptomonney)) {
+            $this->cryptomonney->removeElement($cryptomonney);
         }
 
         return $this;

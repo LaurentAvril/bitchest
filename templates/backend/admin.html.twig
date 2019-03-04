@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	<br>
+
+
+          <div class="d-flex justify-content-end text-center" style="margin: auto; max-width: 350px; border: 1px solid grey; padding: 30px; border-radius:10px;">
+
+	<p>Nouveau Client</p>
+
+	{{ form_start(form) }}
+
+	<div style="width:250px; margin: auto">
+	{{ form_row(form.email, {'label': 'Email'}) }}
+	</div>
+
+	<div style="width:250px; margin: auto">
+	{{ form_row(form.password, {'label': 'Mot de passe'}) }}
+	</div>
+
+	<div style="width:250px; margin: auto">
+	{{ form_row(form.funds, {'label': 'Crédit'}) }}
+	</div>
+
+	<button type="submit" class="btn btn-primary">Créer un compte</button>
+	{{ form_row(form._token) }}
+	
+</div>
+        
+
+
+
+
+
+
+
+{% endblock %}

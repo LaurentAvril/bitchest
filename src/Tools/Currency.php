@@ -16,7 +16,7 @@ class Currency
         for($i=2;$i<=($numberOfDays);$i++)
         {
             $variance = $currency->getCotationFor($cryptomonney);
-            $cotation = round(((($history[$i-2]['y']) * $variance)/100) + ($history[$i-2]['y']), 2);
+            $cotation = ((($history[$i-2]['y']) * $variance)/100) + ($history[$i-2]['y']);
             $date = new \Datetime(date('d-m-Y'));
             $dateBefore = $date->modify('-'.$i.' day');
             // $today = date_now();

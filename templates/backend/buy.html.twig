@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+<h2>Vous allez acheter des {{ monney.name }}s</h2>
+<p>Cours : Aujourd'hui, 1 {{ monney.name }} vaut {{ monney.actualCurrency }}€ et a varié de
+    {% if monney.variationOfDay >= 0 %}
+        <span class="badge badge-success">{{ monney.variationOfDay }}</span>
+    {% else %}
+        <span class="badge badge-danger">{{ monney.variationOfDay }}</span>
+    {% endif %}
+ % depuis hier</p>
+{# mettre un champs choice ou input avec un max à  #}
+{# {{ user.funds/monney.actualCurrency }}
+{{ 0.1730769230769*monney.actualCurrency }} #}
+{# {% for i in  %}
+{% endfor %} #}
+
+    
+    <div class="col-6">
+        {{ form_start(form) }}
+        {{ form_row(form.quantity, {
+            'label': "Achat de cryptomonnaies",
+            'attr': {
+            'placeholder' : 'Montant d\'achat en €'
+        }}) }}
+        <input type="submit" class="btn btn-primary" value="Acheter">
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}
+

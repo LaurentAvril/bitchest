@@ -48,6 +48,16 @@ class Cryptomonney
      */
     private $wallets;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $varianceIsInitialisedToday;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $lastInitDate;
+
     public function __construct()
     {
         $this->wallets = new ArrayCollection();
@@ -142,6 +152,30 @@ class Cryptomonney
             $this->wallets->removeElement($wallet);
             $wallet->removeCryptomonney($this);
         }
+
+        return $this;
+    }
+
+    public function getVarianceIsInitialisedToday(): ?bool
+    {
+        return $this->varianceIsInitialisedToday;
+    }
+
+    public function setVarianceIsInitialisedToday(bool $varianceIsInitialisedToday): self
+    {
+        $this->varianceIsInitialisedToday = $varianceIsInitialisedToday;
+
+        return $this;
+    }
+
+    public function getLastInitDate(): ?\DateTimeInterface
+    {
+        return $this->lastInitDate;
+    }
+
+    public function setLastInitDate(\DateTimeInterface $lastInitDate): self
+    {
+        $this->lastInitDate = $lastInitDate;
 
         return $this;
     }

@@ -16,11 +16,11 @@ class HomeController extends AbstractController
     {
         if($this->getUser() !== NULL)
         {
-            $this->addFlash(
-                'danger',
-                'Vous êtes connecté...'
-            );
-            return $this->redirectToRoute('backend_admin');
+            // $this->addFlash(
+            //     'danger',
+            //     'Vous êtes connecté...'
+            // );
+            return $this->redirectToRoute('backend_portefeuille');
         }
         $error = $utils->getLastAuthenticationError();
         $username = $utils->getLastUsername();

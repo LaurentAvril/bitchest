@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,7 +20,7 @@ class Wallet
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="wallets")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="wallets", cascade = {"persist"})
      */
     private $user;
 
@@ -30,13 +31,20 @@ class Wallet
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Cryptomonney", inversedBy="wallets")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $cryptomonney;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\DateBuy", mappedBy="wallet")
+     */
+    private $dateBuys;
+
     public function __construct()
     {
-        $this->cryptomonney = new ArrayCollection();
+        $this->dateBuys = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -67,27 +75,44 @@ class Wallet
         return $this;
     }
 
-    /**
-     * @return Collection|Cryptomonney[]
-     */
-    public function getCryptomonney()
+    public function getCryptomonney(): ?Cryptomonney
     {
         return $this->cryptomonney;
     }
 
-    public function addCryptomonney(Cryptomonney $cryptomonney): self
+    public function setCryptomonney(?Cryptomonney $cryptomonney): self
     {
-        if (!$this->cryptomonney->contains($cryptomonney)) {
-            $this->cryptomonney[] = $cryptomonney;
+        $this->cryptomonney = $cryptomonney;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DateBuy[]
+     */
+    public function getDateBuys(): Collection
+    {
+        return $this->dateBuys;
+    }
+
+    public function addDateBuy(DateBuy $dateBuy): self
+    {
+        if (!$this->dateBuys->contains($dateBuy)) {
+            $this->dateBuys[] = $dateBuy;
+            $dateBuy->setWallet($this);
         }
 
         return $this;
     }
 
-    public function removeCryptomonney(Cryptomonney $cryptomonney): self
+    public function removeDateBuy(DateBuy $dateBuy): self
     {
-        if ($this->cryptomonney->contains($cryptomonney)) {
-            $this->cryptomonney->removeElement($cryptomonney);
+        if ($this->dateBuys->contains($dateBuy)) {
+            $this->dateBuys->removeElement($dateBuy);
+            // set the owning side to null (unless already changed)
+            if ($dateBuy->getWallet() === $this) {
+                $dateBuy->setWallet(null);
+            }
         }
 
         return $this;

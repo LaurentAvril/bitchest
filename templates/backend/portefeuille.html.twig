@@ -1,7 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
 <table class="table table-striped">
     <thead>
         <tr>
@@ -14,54 +13,53 @@
     </thead>
     <tbody>
     {% for monn in monney %}
-    <tr {% for wall in user.wallets if wall.cryptomonney.name == monn.name %} class="table-warning" {% endfor %}>
+    <tr {% for wall in user.wallets if wall.cryptomonney.name == monn.name and wall.quantity > 0 %} class="table-warning" {% endfor %}>
         {# MONNAIE #}
-        <td>{{ monn.name|capitalize }}</td>
+        <td><img src="/images/{{ monn.name }}.png"> {{ monn.name|capitalize }}</td>
 
         {# QUANTITE #}
         <td>
-            {% for wall in user.wallets if wall.cryptomonney.name == monn.name %}
-                <b>{{ wall.quantity }}</b>
-            {% endfor %}
+            {% for wall in user.wallets if wall.cryptomonney.name == monn.name and wall.quantity > 0 %}
+                <b>{{ wall.quantity|number_format(2, ',', ' ') }}</b>
+            {% endfor %}             
         </td>
         {# COURS ACTUEL #}
         <td>
-            {% for wall in user.wallets if wall.cryptomonney.name == monn.name %}
-                {{ wall.cryptomonney.actualCurrency }}
-            {% endfor %}
+                {{ monn.actualCurrency|number_format(2) }}
         </td>
         {# VARIANCE #}
         <td>
 
             {% for wall in user.wallets if wall.cryptomonney.name == monn.name %}
 
+
+
         {# SCRIPT DE LA REQUETE AJAX #}
         <script type="text/javascript">
         var t = self.setInterval("CotationUpdate()",10000);
             function CotationUpdate(){
             $.ajax({
-                url: 'http://localhost:8000/maj-variance',
+                url: "{{ path('backend_maj-variance') }}",
                 complete: function (response) {
-                    $("#notifications{{ monn.name }}").html(response.responseText);
+                   JSON.parse(json).$("#notifications{{ monn.name }}").html(response.responseText);
                 }
             });
-        }      
+        }
+
         </script>
 
-
-
-                {% if wall.cryptomonney.variationOfDay >= 0 %}
-                    <span id="notifications{{ monn.name }}" class="badge badge-success">{{ wall.cryptomonney.variationOfDay }}</span>
+                {% if monn.variationOfDay >= 0 %}
+                    <span id="notifications{{ monn.name }}" class="badge badge-success">{{ monn.variationOfDay }}</span>
                 {% else %}
-                    <span id="notifications{{ monn.name }}" class="badge badge-danger">{{ wall.cryptomonney.variationOfDay }}</span>
+                    <span id="notifications{{ monn.name }}" class="badge badge-danger">{{ monn.variationOfDay }}</span>
                 {% endif %}
             {% endfor %}
         </td>
         {# ACTION #}
         <td>
-            <a href="#">Acheter</a>
-            {% for wall in user.wallets if wall.cryptomonney.name == monn.name %}
-                | <a href="#">Vendre</a>
+            <a href="{{ path('backend_buy', {'name': monn.name}) }}">Acheter</a>
+            {% for wall in user.wallets if wall.cryptomonney.name == monn.name and wall.quantity > 0 %}
+            | <a onclick="return confirm('Etes-vous sur de vouloir vendre ?');" href="{{ path('backend_sell', {'name': monn.name}) }}">Vendre</a>
             {% endfor %}
         </td>
     </tr>

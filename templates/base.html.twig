@@ -23,6 +23,7 @@
           <img class="imgbitchest" src="../images/bitchest_logo.png" alt="bitchest-logo" width="150px">
           <a href="{{ path('backend_portefeuille') }}">Mon portefeuille</a>
           <a href="{{ path('backend_cours') }}">Cours des monnaies</a>
+          <a href="{{ path('backend_history') }}">Historique d'achats</a>
           <a href="{{ path('deconnexion') }}">Déconnection</a>
         </div>
 
@@ -31,8 +32,8 @@
         {# {% if app.user %} #}
             <div style="height:100px;" class="d-flex" style="height: 200px;">
                 <div style="line-height:50px;" class="mr-auto p-2">{{ user.email }}</div>
-                <div class="p-2"><img class="avatar-sm" src="{{ user.avatar.name }}" alt=""></div>
-                <div style="line-height:50px;" class="p-2">Solde disponible : <b>{{ user.funds }} €</b></div>
+                <div class="p-2"><img class="avatar-sm" src="{{ (user.avatar.name) ?? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxHMZ61_YBq_vUIGkG7MHRA9cSztvgRAMIdGu-i9b0RFb4zLDa_g'}}" alt=""></div>
+                <div style="line-height:50px;" class="p-2">Solde disponible : <b>{{ user.funds|number_format(2) }} €</b></div>
             </div>
         {# {% endif %} #}
 
@@ -51,5 +52,8 @@
         
         {% block javascripts %}{% endblock %}
     </body>
+    {# <footer style="height:100px; background-color:#F1F1F1;">
+        <p class="text-center" style="color:#171717;line-height:70px;">Bitchest - Copyright 2019</p>
+    </footer> #}
 </html>
 

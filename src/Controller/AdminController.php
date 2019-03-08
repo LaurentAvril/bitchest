@@ -45,6 +45,7 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/maj-variance", name="backend_maj-variance")
+     * @IsGranted("ROLE_USER")
      */ 
     public function majVariance(CryptomonneyRepository $repoMonney, ObjectManager $manager)
     {
@@ -97,13 +98,9 @@ class AdminController extends AbstractController
                 $manager->flush();
             }
             
-            // dd($monn->getVariationOfDay());
-            $table[] = $monn->getVariationOfDay();
+            $table[] = json_encode($monn->getVariationOfDay());
+            // $response[] = json_encode($table);
         }
-        // dd($table);
-        // return $this->render('backend/cours-des-monnaies.html.twig', [
-        //     'table' => $table
-        //     ]);
         return new JsonResponse($table, 200);// new Response(json_encode($table), 200);
     }
 
@@ -120,6 +117,7 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/buy-{name}", name="backend_buy")
+     * @IsGranted("ROLE_USER")
      */ 
     public function buy(Cryptomonney $crypto, CryptomonneyRepository $repoMonney, WalletRepository $wallrepo, Request $request, ObjectManager $manager)
     {
@@ -167,8 +165,6 @@ class AdminController extends AbstractController
                       ;
             $manager->persist($dateOfBuy);
 
-        // dd($crypto);
-
             $manager->flush();
 
             return $this->redirectToRoute('backend_portefeuille');
@@ -184,6 +180,7 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/sell-{name}", name="backend_sell")
+     * @IsGranted("ROLE_USER")
      */ 
     public function sell(Wallet $wallet = null, Cryptomonney $crypto, WalletRepository $wallrepo, Request $request, ObjectManager $manager)
     {
@@ -213,6 +210,7 @@ class AdminController extends AbstractController
 
     /**
      * @Route("/historique-achats", name="backend_history")
+     * @IsGranted("ROLE_USER")
      */ 
     public function historyOfBuys(WalletRepository $repoWallet, DateBuyRepository $historyRepo, Request $request, ObjectManager $manager)
     {

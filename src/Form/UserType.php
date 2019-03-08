@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class UserType extends AbstractType
@@ -20,7 +21,12 @@ class UserType extends AbstractType
             ->add('funds', MoneyType::class, [
                     'currency' => '€',
                 ])
-        ;
+            ->add('adminChoice', ChoiceType::class, [
+                'choices'  => [
+                'User' => false,
+                'Admin' => true
+                ],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\User;
 use App\Entity\Avatar;
+use App\Entity\Role;
 use App\Entity\Wallet;
 use App\Tools\Currency;
 use App\Entity\Cryptomonney;
@@ -28,6 +29,13 @@ class AppFixtures extends Fixture
         $serial = [];
         $wallObj = [];
 
+        $adminRole = new Role();
+        $adminRole->setTitle('ROLE_ADMIN');
+        $manager->persist($adminRole);
+
+        $userRole = new Role();
+        $userRole->setTitle('ROLE_USER');
+        $manager->persist($userRole);
         
         $user = new User();
 
@@ -35,20 +43,22 @@ class AppFixtures extends Fixture
 
         $password = $this->encoder->encodePassword($user, 'azerty');
 
-        $user->setFirstName('Laurent')
-        ->setLastName('AVRIL')
+        $user->setFirstName('Diarra')
+            ->setLastName('SIDIKI')
             ->setEmail('test@test.fr')
             ->setPassword($password)
-            ->setFunds(850);
+            ->setFunds(1500)
+            ->addRole($adminRole);
+
+        $manager->persist($user);
             
-            $avatar = new Avatar;
+        $avatar = new Avatar;
 
         $avatar->setName($picture)
         ->setUser($user);
                
         $manager->persist($avatar);
         
-        $manager->persist($user);
         
         for($i=0; $i<10; $i++)
         {

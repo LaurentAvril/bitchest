@@ -20,11 +20,14 @@
     <body>
 
         <div class="sidenav text-center">
-          <img class="imgbitchest" src="../images/bitchest_logo.png" alt="bitchest-logo" width="150px">
-          <a href="{{ path('backend_portefeuille') }}">Mon portefeuille</a>
-          <a href="{{ path('backend_cours') }}">Cours des monnaies</a>
-          <a href="{{ path('backend_history') }}">Historique d'achats</a>
-          <a href="{{ path('deconnexion') }}">Déconnection</a>
+            <img class="imgbitchest" src="../images/bitchest_logo.png" alt="bitchest-logo" width="150px">
+            <a href="{{ path('backend_portefeuille') }}">Mon portefeuille</a>
+            <a href="{{ path('backend_cours') }}">Cours des monnaies</a>
+            <a href="{{ path('backend_history') }}">Historique d'achats</a>
+            {% if is_granted('ROLE_ADMIN') == true %}
+                <a href="{{ path('super_admin') }}">Administration</a>
+            {% endif %}
+            <a href="{{ path('deconnexion') }}">Déconnection</a>
         </div>
 
         <div class="container">

@@ -54,9 +54,20 @@ class User implements UserInterface
      */
     private $wallets;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Role", mappedBy="users")
+     */
+    private $roles;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $adminChoice;
+
     public function __construct()
     {
         $this->wallets = new ArrayCollection();
+        $this->roles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -171,12 +182,7 @@ class User implements UserInterface
         }
 
         return $this;
-    }
-
-    public function getRoles()
-    {
-        return ['ROLE_USER'];
-    }
+    }    
 
     public function getUsername()
     {
@@ -191,5 +197,54 @@ class User implements UserInterface
     public function getSalt()
     {
 
+    }
+
+    /**
+     * @return Collection|Role[]
+     */
+    public function getRoles()
+    {
+        //Conversion du arrayCollection ne un simple tableau de chaines de caractères "titre du role"
+        $roles = $this->roles->map(function($role)
+        {
+            //retourne 'ROLE_ADMIN'
+            return $role->getTitle();
+        })->toArray();
+
+        //Ajout de ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return $roles;
+    }
+    public function addRole(Role $role): self
+    {
+        if (!$this->roles->contains($role)) {
+            $this->roles[] = $role;
+            $role->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRole(Role $role): self
+    {
+        if ($this->roles->contains($role)) {
+            $this->roles->removeElement($role);
+            $role->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    public function getAdminChoice(): ?bool
+    {
+        return $this->adminChoice;
+    }
+
+    public function setAdminChoice(?bool $adminChoice): self
+    {
+        $this->adminChoice = $adminChoice;
+
+        return $this;
     }
 }

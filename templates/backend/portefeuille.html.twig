@@ -46,6 +46,18 @@
             });
         }
 
+        {# $.ajax({
+                url: "{{ path('backend_maj-variance') }}",
+                complete: function (response) {
+                   var results = JSON.parse(response.responseText)
+                    for(var i = 0; i < results.length; i++)
+                    {
+                        $("#notifications{{ monn.name }}").html(results[i]);
+                    }
+                }
+
+            }); #}
+
         </script>
 
                 {% if monn.variationOfDay >= 0 %}

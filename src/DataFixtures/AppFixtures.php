@@ -38,27 +38,23 @@ class AppFixtures extends Fixture
         $manager->persist($userRole);
         
         $user = new User();
-
-        $picture = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTndOGAVgKynSXsLy3r6vhC6Cek-D2ZS74J_saaNSeLUWP-AzE4';
-
         $password = $this->encoder->encodePassword($user, 'azerty');
-
         $user->setFirstName('Diarra')
             ->setLastName('SIDIKI')
-            ->setEmail('test@test.fr')
+            ->setEmail('test@email.fr')
             ->setPassword($password)
             ->setFunds(1500)
-            ->addRole($adminRole);
-
+            ->setAdminChoice(1)
+            ->addRole($adminRole)        
+            ->addRole($userRole);        
         $manager->persist($user);
-            
-        $avatar = new Avatar;
-
-        $avatar->setName($picture)
-        ->setUser($user);
-               
-        $manager->persist($avatar);
         
+        $avatar = new Avatar;
+        $picture = 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png';
+        $avatar->setName($picture)
+                ->setUser($user);               
+        $manager->persist($avatar);
+               
         
         for($i=0; $i<10; $i++)
         {
@@ -73,6 +69,7 @@ class AppFixtures extends Fixture
             ;
             
             $manager->persist($crypto);
+            $cryptos[] = $crypto;
             
             $wallet = new Wallet();
             $wallet->setUser($user)
@@ -81,6 +78,35 @@ class AppFixtures extends Fixture
             $manager->persist($wallet);
         }
         
+        for($i = 1; $i <= 5; $i++)
+        {
+            $newUser = new User();
+            $password = $this->encoder->encodePassword($user, 'azerty');
+            $newUser->setFirstName('PrénomUser'.$i)
+            ->setLastName('NomUser'.$i)
+            ->setEmail('User'.$i.'@email.fr')
+            ->setPassword($password)
+            ->setFunds(rand(750, 2000))
+            ->setAdminChoice(0)
+            ->addRole($userRole);            
+            $manager->persist($newUser);
+
+            $avatar = new Avatar;
+            $picture = 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png';
+            $avatar->setName($picture)
+                    ->setUser($newUser);               
+            $manager->persist($avatar);
+            
+            foreach($cryptos as $crypto)
+            {
+                $wallets = new Wallet();
+                $wallets->setUser($newUser)
+                ->setQuantity(0)//rand(150, 1000)
+                ->setCryptomonney($crypto);
+                $manager->persist($wallets);
+            }
+        }
+
         $manager->flush();
     }
 }

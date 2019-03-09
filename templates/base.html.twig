@@ -21,6 +21,7 @@
 
         <div class="sidenav text-center">
             <img class="imgbitchest" src="../images/bitchest_logo.png" alt="bitchest-logo" width="150px">
+            <a href="{{ path('backend_account', {'email': user.email}) }}">Mon compte</a>
             <a href="{{ path('backend_portefeuille') }}">Mon portefeuille</a>
             <a href="{{ path('backend_cours') }}">Cours des monnaies</a>
             <a href="{{ path('backend_history') }}">Historique d'achats</a>
@@ -35,7 +36,13 @@
         {# {% if app.user %} #}
             <div style="height:100px;" class="d-flex" style="height: 200px;">
                 <div style="line-height:50px;" class="mr-auto p-2">{{ user.email }}</div>
-                <div class="p-2"><img class="avatar-sm" src="{{ (user.avatar.name) ?? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxHMZ61_YBq_vUIGkG7MHRA9cSztvgRAMIdGu-i9b0RFb4zLDa_g'}}" alt=""></div>
+                <div class="p-2">
+                    {% if user.avatar.name|is_url() is not null %}
+                        <img class="avatar-sm" src="{{ user.avatar.name }}">
+                    {% else %}
+                        <img class="avatar-sm" src="/images/avatars/{{ user.avatar.name }}">
+                    {% endif %}
+                </div>
                 <div style="line-height:50px;" class="p-2">Solde disponible : <b>{{ user.funds|number_format(2) }} €</b></div>
             </div>
         {# {% endif %} #}

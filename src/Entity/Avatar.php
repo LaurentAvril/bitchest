@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
+// use Serializable;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AvatarRepository")
  */
-class Avatar
+class Avatar implements \Serializable
 {
     /**
      * @ORM\Id()
@@ -25,6 +26,8 @@ class Avatar
      * @ORM\OneToOne(targetEntity="App\Entity\User", inversedBy="avatar", cascade={"persist", "remove"})
      */
     private $user;
+
+     private $file;
 
     public function getId(): ?int
     {
@@ -53,5 +56,33 @@ class Avatar
         $this->user = $user;
 
         return $this;
+    }
+
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    public function setFile($file)
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
+    public function serialize()
+    {
+        return serialize([
+            $this->id,
+            $this->name
+        ]);
+    }
+
+    public function unserialize($serialized)
+    {
+        list(
+            $this->id,
+            $this->name
+        ) = unserialize($serialized);
     }
 }

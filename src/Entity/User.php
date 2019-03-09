@@ -5,10 +5,15 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @UniqueEntity(
+ *  fields= {"email"},
+ *  message="L'email existe déjà")
  */
 class User implements UserInterface
 {
@@ -31,11 +36,13 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $password;
 
@@ -50,7 +57,8 @@ class User implements UserInterface
     private $avatar;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Wallet", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="App\Entity\Wallet", mappedBy="user", cascade={"remove"})
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="cascade")
      */
     private $wallets;
 
@@ -212,7 +220,7 @@ class User implements UserInterface
         })->toArray();
 
         //Ajout de ROLE_USER
-        $roles[] = 'ROLE_USER';
+        // $roles[] = 'ROLE_USER';
 
         return $roles;
     }

@@ -16,6 +16,7 @@
 
 <tbody>
 {% for histo in wallet if histo.quantity > 0 %}
+{{ dump(histo) }}
 <tr>
 {# {{dump(histo)}} #}
 <td>
@@ -50,7 +51,10 @@
 </tbody>
 </table>
 
-
+{% if wallet is empty %}
+<hr>
+<h3>Votre historique d'achat actif est vide :(</h3>
+{% endif %}
 
 
 {% endblock %}

@@ -20,7 +20,7 @@ class Wallet
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="wallets", cascade = {"persist"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="wallets", cascade={"persist"})
      */
     private $user;
 

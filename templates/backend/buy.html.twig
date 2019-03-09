@@ -2,7 +2,7 @@
 
 {% block body %}
 
-<h2>Vous allez acheter des {{ monney.name }}s</h2>
+<h2>Vous allez acheter des {{ monney.name }}s <img style="width:1.2em;" src="/images/{{ monney.name }}.png"></h2>
 <p>Cours : Aujourd'hui, 1 {{ monney.name }} vaut {{ monney.actualCurrency }}€ et a varié de
     {% if monney.variationOfDay >= 0 %}
         <span class="badge badge-success">{{ monney.variationOfDay }}</span>

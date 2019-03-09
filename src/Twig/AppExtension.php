@@ -16,6 +16,7 @@ class AppExtension extends AbstractExtension
             new TwigFilter('printr', [$this, 'printr']),
             new TwigFilter('die', [$this, 'die']),
             new TwigFilter('array_slice', [$this, 'array_slice']),
+            new TwigFilter('is_url', [$this, 'is_url']),
         ];
     }
     
@@ -47,5 +48,16 @@ class AppExtension extends AbstractExtension
     public function array_slice($arr)
     {
         return array_slice($arr, 0, 30);
+    }
+
+    public function is_url($str)
+    {
+        if (filter_var($str, FILTER_VALIDATE_URL) === FALSE) {
+            return null;
+        }
+        else
+        {
+            return true;
+        }
     }
 }

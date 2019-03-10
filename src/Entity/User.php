@@ -36,7 +36,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\Email
+     * @Assert\Email(message="L'email n'est pas valide")
      * @Assert\NotBlank
      */
     private $email;
@@ -50,7 +50,6 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     * @Assert\Type(type="float")
      */
     private $funds;
 

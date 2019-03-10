@@ -151,8 +151,6 @@ class AdminController extends AbstractController
             // dump($crypto->getActualCurrency());//Cours actuel de la cryptomonnaie
             // dump($form->get('quantity')->getViewData());//Montant soumis dans le form
             // dump(round($form->get('quantity')->getViewData() / $crypto->getActualCurrency(),2));// Montant de la cryptomonnaie achetée
-            dd($form->get('quantity')->getViewData());
-            dd($user->getFunds());
             //maj des fonds
             $user->setFunds($user->getFunds() - $form->get('quantity')->getViewData());
             

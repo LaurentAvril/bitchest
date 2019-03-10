@@ -146,29 +146,28 @@ class AdminController extends AbstractController
         
         if($form->isSubmitted() && $form->isValid())
         { 
+            $userForm = $form->getData();
             // dump($user->getFunds()); //Fonds actuels du l'user
             // dump($goodWallet->getQuantity()); //Crédit crypto actuellement possédé par le user
             // dump($crypto->getActualCurrency());//Cours actuel de la cryptomonnaie
             // dump($form->get('quantity')->getViewData());//Montant soumis dans le form
             // dump(round($form->get('quantity')->getViewData() / $crypto->getActualCurrency(),2));// Montant de la cryptomonnaie achetée
             //maj des fonds
-            $user->setFunds($user->getFunds() - $form->get('quantity')->getViewData());
             
             //maj du montant des cryptos
             $goodWallet->setQuantity($goodWallet->getQuantity() + $form->get('quantity')->getViewData() / $crypto->getActualCurrency());
-
+            
             //maj date d'achat
             $dateOfBuy = new DateBuy;
             $dateOfBuy->setDateOfPurchase(new \Datetime('now', new \DateTimeZone('Europe/Paris')))
-                      ->setWallet($goodWallet)
+            ->setWallet($goodWallet)
                       ->setAmount($form->get('quantity')->getViewData())
                       ->setDayCurrency($crypto->getActualCurrency())
                       ;
-            $manager->persist($dateOfBuy);
+                      $manager->persist($dateOfBuy);
 
             
-            $error = ($user->getFunds() < 0 || ($user->getFunds() - $form->get('quantity')->getViewData()) > 0);
-            // dd($error);
+            $error = (($user->getFunds() - floatval($form->get('quantity')->getViewData())) < 0.0);
             if($error == true)
             {
                 $this->addFlash(
@@ -180,7 +179,8 @@ class AdminController extends AbstractController
                 'name' => $crypto->getName(),
                 ]);
             }
-
+            $user->setFunds($user->getFunds() - $form->get('quantity')->getViewData());
+            
             $manager->flush();
             
             return $this->redirectToRoute('backend_portefeuille');

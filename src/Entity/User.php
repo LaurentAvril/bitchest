@@ -36,18 +36,21 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Email
      * @Assert\NotBlank
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(min=5, max=20)
      * @Assert\NotBlank
      */
     private $password;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     * @Assert\Type(type="float")
      */
     private $funds;
 

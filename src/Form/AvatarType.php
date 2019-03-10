@@ -24,6 +24,7 @@ class AvatarType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Avatar::class,
+            'translation_domain' => 'forms'
         ]);
     }
 }

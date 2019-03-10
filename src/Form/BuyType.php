@@ -16,8 +16,6 @@ class BuyType extends AbstractType
             ->add('quantity', MoneyType::class, [
                     'label' => 'Acheter'
             ])
-            // ->add('user')
-            // ->add('cryptomonney')
         ;
     }
 
@@ -25,6 +23,7 @@ class BuyType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Wallet::class,
+            'translation_domain' => 'forms'
         ]);
     }
 }

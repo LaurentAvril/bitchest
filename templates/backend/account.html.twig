@@ -29,7 +29,6 @@
     <h3>Vos achats du moment :
     {% for monn in monney %}
     {% for wall in userAccount.wallets if wall.cryptomonney.name == monn.name and wall.quantity > 0 %} <img src="/images/{{ monn.name }}.png">  {% endfor %}
-
     {% endfor %}
     </h3>
     <br>

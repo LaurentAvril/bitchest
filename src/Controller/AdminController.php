@@ -151,7 +151,8 @@ class AdminController extends AbstractController
             // dump($crypto->getActualCurrency());//Cours actuel de la cryptomonnaie
             // dump($form->get('quantity')->getViewData());//Montant soumis dans le form
             // dump(round($form->get('quantity')->getViewData() / $crypto->getActualCurrency(),2));// Montant de la cryptomonnaie achetée
-
+            dd($form->get('quantity')->getViewData());
+            dd($user->getFunds());
             //maj des fonds
             $user->setFunds($user->getFunds() - $form->get('quantity')->getViewData());
             
@@ -167,16 +168,32 @@ class AdminController extends AbstractController
                       ;
             $manager->persist($dateOfBuy);
 
-            $manager->flush();
+            
+            $error = ($user->getFunds() < 0 || ($user->getFunds() - $form->get('quantity')->getViewData()) > 0);
+            // dd($error);
+            if($error == true)
+            {
+                $this->addFlash(
+                'danger',
+                'Vos fonds sont insuffisants ;)'
+            );
+            
+            return $this->redirectToRoute('backend_buy', [
+                'name' => $crypto->getName(),
+                ]);
+            }
 
+            $manager->flush();
+            
             return $this->redirectToRoute('backend_portefeuille');
         }
-        
+
         $user = $this->getUser();
         return $this->render('backend/buy.html.twig', [
+            'name' => $crypto->getName(),
             'form'   => $form->createView(),
             'monney'   => $monney,
-            'user' => $user
+            'user' => $user,
         ]);
     }
 
